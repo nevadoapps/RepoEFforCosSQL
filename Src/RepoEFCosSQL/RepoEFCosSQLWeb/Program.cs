@@ -1,9 +1,48 @@
+using System.Collections;
+using Microsoft.IdentityModel.Tokens;
+using RepoEFCosSQLWeb.ConfigurationOptions;
+using RepoEFCosSQLWeb.Context;
+using RepoEFCosSQLWeb.Entities;
+using RepoEFCosSQLWeb.Enums;
+using RepoEFCosSQLWeb.Extensions;
+
 var builder = WebApplication.CreateBuilder(args);
+
+builder.Configuration.AddJsonFile("AppSettings.json");
+
+IConfiguration configuration = builder.Configuration;
+AppSettings appSettings = new();
+configuration.Bind(appSettings);
+
+builder.Services.Configure<AppSettings>(configuration);
+
+if (appSettings.ConnectionStrings.Where(f => f.IsActive).Count() == 1)
+{
+    string? connStr = string.Empty;
+    CommonEnums.ConnType? connType;
+    (connStr, connType) = GetConfiguration(appSettings);
+
+    switch (connType)
+    {
+        case CommonEnums.ConnType.Sql:
+            builder.Services.AddSqlDb(connStr);
+            break;
+        case CommonEnums.ConnType.Cosmos:
+            //builder.Services.AddCosmosDb();
+            break;
+        case null:
+            break;
+        default:
+            throw new ArgumentOutOfRangeException();
+    }
+}
 
 // Add services to the container.
 builder.Services.AddControllersWithViews();
 
 var app = builder.Build();
+
+SeedData(app.Services);
 
 // Configure the HTTP request pipeline.
 if (!app.Environment.IsDevelopment())
@@ -25,3 +64,69 @@ app.MapControllerRoute(
     pattern: "{controller=Home}/{action=Index}/{id?}");
 
 app.Run();
+
+static (string, CommonEnums.ConnType) GetConfiguration(AppSettings appSettings)
+{
+    if (appSettings.ConnectionStrings.Where(f => f.IsActive).Count() == 1)
+    {
+        return appSettings.ConnectionStrings.Where(f => f.IsActive == true)
+            .Select(s => (s.ConnString, s.ConnType)).FirstOrDefault();
+    }
+    else
+    {
+        return (string.Empty, 0);
+    }
+}
+
+static void SeedData(IServiceProvider serviceProvider)
+{
+    //using (var context = serviceProvider.GetRequiredService<AppDbContext>())
+    //{
+        Random rnd = new Random();
+        //context.Database.EnsureCreated();
+
+        var players = GetPlayers();
+        Console.ReadLine();
+        //context.Players.AddRange(players);
+        //context.SaveChanges();
+
+        static List<LevelEntity> GetLevels()
+        {
+            Random rnd = new Random();
+            List<LevelEntity> levels = new();
+
+            for (int i = 0; i < 1000; i++)
+            {
+                levels.Add(new LevelEntity
+                {
+                    Id = Guid.NewGuid().ToString(),
+                    LevelName = $"Level - {rnd.Next(1000, 9999)}",
+                    IsCompleted = false,
+                    NumberOfStart = 0
+                });
+            }
+
+            return levels;
+        }
+
+        static IEnumerable<PlayerEntity> GetPlayers()
+        {
+            Random rnd = new Random();
+            List<PlayerEntity> players = new();
+
+            for (int i = 0; i < 1000; i++)
+            {
+                players.Add(new PlayerEntity()
+                {
+                    Id = Guid.NewGuid().ToString(),
+                    Name = $"Player - {rnd.Next(1000, 9999)}",
+                    Email = $"player{rnd.Next(1000, 9999)}@player.com",
+                    IsActive = true,
+                    Levels = GetLevels()
+                });
+            }
+
+            return players.AsEnumerable();
+        }
+    //}
+}

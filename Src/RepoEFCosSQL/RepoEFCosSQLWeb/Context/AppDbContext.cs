@@ -1,12 +1,13 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using RepoEFCosSQLWeb.Entities;
 using System.Collections.Generic;
 using System.Reflection.Emit;
 
 namespace RepoEFCosSQLWeb.Context
 {
-    public class AppContext : DbContext
+    public class AppDbContext : DbContext
     {
-        public AppContext(DbContextOptions options) : base(options)
+        public AppDbContext(DbContextOptions options) : base(options)
         {
         }
 
