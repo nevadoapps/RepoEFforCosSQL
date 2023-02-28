@@ -1,7 +1,11 @@
 {
   "ExpandedNodes": [
-    ""
+    "",
+    "\\Src",
+    "\\Src\\RepoEFCosSQL",
+    "\\Src\\RepoEFCosSQL\\RepoEFCosSQL",
+    "\\Src\\RepoEFCosSQL\\RepoEFCosSQL\\Entities"
   ],
-  "SelectedNode": "\\RepoEFCosSQL.sln",
+  "SelectedNode": "\\Src\\RepoEFCosSQL\\RepoEFCosSQL",
   "PreviewInSolutionExplorer": false
 }

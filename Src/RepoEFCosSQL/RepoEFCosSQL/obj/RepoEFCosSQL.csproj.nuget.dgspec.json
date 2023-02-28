@@ -1,15 +1,15 @@
 {
   "format": 1,
   "restore": {
-    "C:\\Users\\sehay\\Source\\Repos\\nevadoapps\\RepoEFforCosSQL\\Src\\RepoEFCosSQL\\RepoEFCosSQL\\RepoEFCosSQL.csproj": {}
+    "C:\\Users\\sehay\\source\\repos\\nevadoapps\\RepoEFforCosSQL\\Src\\RepoEFCosSQL\\RepoEFCosSQL\\RepoEFCosSQL.csproj": {}
   },
   "projects": {
-    "C:\\Users\\sehay\\Source\\Repos\\nevadoapps\\RepoEFforCosSQL\\Src\\RepoEFCosSQL\\RepoEFCosSQL\\RepoEFCosSQL.csproj": {
+    "C:\\Users\\sehay\\source\\repos\\nevadoapps\\RepoEFforCosSQL\\Src\\RepoEFCosSQL\\RepoEFCosSQL\\RepoEFCosSQL.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\sehay\\Source\\Repos\\nevadoapps\\RepoEFforCosSQL\\Src\\RepoEFCosSQL\\RepoEFCosSQL\\RepoEFCosSQL.csproj",
+        "projectUniqueName": "C:\\Users\\sehay\\source\\repos\\nevadoapps\\RepoEFforCosSQL\\Src\\RepoEFCosSQL\\RepoEFCosSQL\\RepoEFCosSQL.csproj",
         "projectName": "RepoEFCosSQL",
-        "projectPath": "C:\\Users\\sehay\\Source\\Repos\\nevadoapps\\RepoEFforCosSQL\\Src\\RepoEFCosSQL\\RepoEFCosSQL\\RepoEFCosSQL.csproj",
+        "projectPath": "C:\\Users\\sehay\\source\\repos\\nevadoapps\\RepoEFforCosSQL\\Src\\RepoEFCosSQL\\RepoEFCosSQL\\RepoEFCosSQL.csproj",
         "packagesPath": "C:\\Users\\sehay\\.nuget\\packages\\",
         "outputPath": "C:\\Users\\sehay\\source\\repos\\nevadoapps\\RepoEFforCosSQL\\Src\\RepoEFCosSQL\\RepoEFCosSQL\\obj\\",
         "projectStyle": "PackageReference",
@@ -44,6 +44,28 @@
       "frameworks": {
         "net6.0": {
           "targetAlias": "net6.0",
+          "dependencies": {
+            "Microsoft.EntityFrameworkCore": {
+              "target": "Package",
+              "version": "[6.0.14, )"
+            },
+            "Microsoft.EntityFrameworkCore.Cosmos": {
+              "target": "Package",
+              "version": "[6.0.14, )"
+            },
+            "Microsoft.EntityFrameworkCore.SqlServer": {
+              "target": "Package",
+              "version": "[6.0.14, )"
+            },
+            "Microsoft.Extensions.Hosting": {
+              "target": "Package",
+              "version": "[6.0.1, )"
+            },
+            "Newtonsoft.Json": {
+              "target": "Package",
+              "version": "[13.0.2, )"
+            }
+          },
           "imports": [
             "net461",
             "net462",
