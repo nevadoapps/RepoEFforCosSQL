@@ -9,18 +9,16 @@ namespace RepoEFCosSQLWeb.Context
     {
         public AppDbContext(DbContextOptions options) : base(options)
         {
+            base.Database.EnsureCreated();
         }
 
-        public DbSet<LevelEntity> Levels { get; set; }
         public DbSet<PlayerEntity> Players { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            modelBuilder.Entity<LevelEntity>()
-                .HasOne(h => h.Player)
-                .WithMany(m => m.Levels)
-                .HasForeignKey(p => p.Id);
-
+            modelBuilder.Entity<PlayerEntity>().HasKey(k => k.Id);
+            modelBuilder.Entity<PlayerEntity>().HasPartitionKey(k => k.Id);
+            modelBuilder.Entity<PlayerEntity>().ToContainer("Players");
             base.OnModelCreating(modelBuilder);
         }
     }

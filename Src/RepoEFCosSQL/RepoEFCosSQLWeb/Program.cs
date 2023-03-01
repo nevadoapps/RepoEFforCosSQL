@@ -1,4 +1,5 @@
 using System.Collections;
+using Microsoft.Extensions.DependencyInjection;
 using Microsoft.IdentityModel.Tokens;
 using RepoEFCosSQLWeb.ConfigurationOptions;
 using RepoEFCosSQLWeb.Context;
@@ -25,10 +26,10 @@ if (appSettings.ConnectionStrings.Where(f => f.IsActive).Count() == 1)
     switch (connType)
     {
         case CommonEnums.ConnType.Sql:
-            builder.Services.AddSqlDb(connStr);
+            builder.Services.AddSqlDb();
             break;
         case CommonEnums.ConnType.Cosmos:
-            //builder.Services.AddCosmosDb();
+            builder.Services.AddCosmosDb();
             break;
         case null:
             break;
@@ -42,7 +43,36 @@ builder.Services.AddControllersWithViews();
 
 var app = builder.Build();
 
-SeedData(app.Services);
+//Seed Data
+using (var scope = app.Services.CreateScope())
+{
+    using (var context = scope.ServiceProvider.GetRequiredService<AppDbContext>())
+    {
+        Random rnd = new Random();
+        var players = GetPlayers();
+        context.Players.AddRange(players);
+        context.SaveChanges();
+
+        static IEnumerable<PlayerEntity> GetPlayers()
+        {
+            Random rnd = new Random();
+            List<PlayerEntity> players = new();
+
+            for (int i = 0; i < 100; i++)
+            {
+                players.Add(new PlayerEntity()
+                {
+                    Id = Guid.NewGuid().ToString(),
+                    Name = $"Player - {rnd.Next(10000000, 99999999)}",
+                    Email = $"player{rnd.Next(10000000, 99999999)}@player.com",
+                    IsActive = true
+                });
+            }
+
+            return players.AsEnumerable();
+        }
+    }
+}
 
 // Configure the HTTP request pipeline.
 if (!app.Environment.IsDevelopment())
@@ -78,55 +108,3 @@ static (string, CommonEnums.ConnType) GetConfiguration(AppSettings appSettings)
     }
 }
 
-static void SeedData(IServiceProvider serviceProvider)
-{
-    //using (var context = serviceProvider.GetRequiredService<AppDbContext>())
-    //{
-        Random rnd = new Random();
-        //context.Database.EnsureCreated();
-
-        var players = GetPlayers();
-        Console.ReadLine();
-        //context.Players.AddRange(players);
-        //context.SaveChanges();
-
-        static List<LevelEntity> GetLevels()
-        {
-            Random rnd = new Random();
-            List<LevelEntity> levels = new();
-
-            for (int i = 0; i < 1000; i++)
-            {
-                levels.Add(new LevelEntity
-                {
-                    Id = Guid.NewGuid().ToString(),
-                    LevelName = $"Level - {rnd.Next(1000, 9999)}",
-                    IsCompleted = false,
-                    NumberOfStart = 0
-                });
-            }
-
-            return levels;
-        }
-
-        static IEnumerable<PlayerEntity> GetPlayers()
-        {
-            Random rnd = new Random();
-            List<PlayerEntity> players = new();
-
-            for (int i = 0; i < 1000; i++)
-            {
-                players.Add(new PlayerEntity()
-                {
-                    Id = Guid.NewGuid().ToString(),
-                    Name = $"Player - {rnd.Next(1000, 9999)}",
-                    Email = $"player{rnd.Next(1000, 9999)}@player.com",
-                    IsActive = true,
-                    Levels = GetLevels()
-                });
-            }
-
-            return players.AsEnumerable();
-        }
-    //}
-}
