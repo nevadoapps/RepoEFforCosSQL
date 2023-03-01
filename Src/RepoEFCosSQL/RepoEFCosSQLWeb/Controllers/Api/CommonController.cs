@@ -24,10 +24,49 @@ namespace RepoEFCosSQLWeb.Controllers.Api
         [HttpGet("Get")]
         public async Task<IActionResult> Get()
         {
+            var result = _context.Players.ToList();
+
             return Ok(new
             {
                 Provider= _context.Database.ProviderName,
-                Data = _context.Players.ToList()
+                Count = result.Count,
+                Data = result
+            });
+        }
+
+        [HttpGet("GetById/{id}")]
+        public async Task<IActionResult> GetById(string? id)
+        {
+            var result = _context.Players.Where(f => f.Id == id).ToList();
+            return Ok(new
+            {
+                Provider = _context.Database.ProviderName,
+                Count = result.Count,
+                Data = result
+            });
+        }
+
+        [HttpGet("GetByEmail/{email}")]
+        public async Task<IActionResult> GeyByEmail(string? email)
+        {
+            var result = _context.Players.Where(f => f.Email == email).ToList();
+            return Ok(new
+            {
+                Provider = _context.Database.ProviderName,
+                Count = result.Count,
+                Data = result
+            });
+        }
+
+        [HttpGet("GetByActive/{active}")]
+        public async Task<IActionResult> GetByActive(string active)
+        {
+            var result = _context.Players.Where(f => f.IsActive == bool.Parse(active)).ToList();
+            return Ok(new
+            {
+                Provider = _context.Database.ProviderName,
+                Count = result.Count,
+                Data = result
             });
         }
     }

@@ -65,7 +65,7 @@ using (var scope = app.Services.CreateScope())
                     Id = Guid.NewGuid().ToString(),
                     Name = $"Player - {rnd.Next(10000000, 99999999)}",
                     Email = $"player{rnd.Next(10000000, 99999999)}@player.com",
-                    IsActive = true
+                    IsActive = rnd.Next(0, 1) == 1 ? true : false
                 });
             }
 
